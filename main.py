@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as imread
-from sklearn.decomposition import PCA
+from sklearn.decomposition import PCA, IncrementalPCA
 from PIL import Image
 
 
@@ -73,6 +73,17 @@ def main():
     plt.ylabel('Cumulative Explained Variance')
     plt.title(f'Number of components explaining 95% variance: {num_components}')
     plt.show()
+
+    # Reconstruct the image using the number of components calculated in the previous step
+    ipca = IncrementalPCA(n_components=num_components)
+    image_reconstructed = ipca.inverse_transform(ipca.fit_transform(image_bw_flattened))
+
+    # Plotting the reconstructed image
+    plt.figure(figsize=[12, 8])
+    plt.imshow(image_reconstructed.reshape(image_bw2.shape), cmap='gray')
+    plt.show()
+
+    ### TASK 4 ###
 
 
 if __name__ == "__main__":
