@@ -85,6 +85,22 @@ def main():
 
     ### TASK 4 ###
 
+    c = [5, 15, 30, 50, 100, 200]
+    plt.figure(figsize=[20, 15])
+
+    for i in range(6):
+        # Apply IncrementalPCA with the current number of components
+        ipca = IncrementalPCA(n_components=c[i])
+        image_reconstructed = ipca.inverse_transform(ipca.fit_transform(image_bw_flattened))
+
+        # Create a subplot for the current reconstructed image
+        plt.subplot(2, 3, i + 1)
+        plt.imshow(image_reconstructed.reshape(image_bw2.shape), cmap='gray')
+        plt.title(f'Reconstructed image with {c[i]} components')
+
+        # Display the figure with all subplots
+    plt.tight_layout()
+    plt.show()
 
 if __name__ == "__main__":
     main()
