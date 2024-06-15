@@ -15,9 +15,38 @@ def checker(eigenvalues, eigenvectors, matrix):
 def display_image(image_array):
     plt.imshow(image_array, cmap='gray')
     plt.show()
+    return
+
+
+### TASK 5 ###
+def encrypt_message(message, key_matrix):
+    message_vector = np.array([ord(char) for char in message])
+    eigenvalues, eigenvectors = np.linalg.eig(key_matrix)
+    diagonalized_key_matrix = np.dot(np.dot(eigenvectors, np.diag(eigenvalues)), np.linalg.inv(eigenvectors))
+    encrypted_vector = np.dot(diagonalized_key_matrix, message_vector)
+    return encrypted_vector
+
+
+def decrypt_message(encrypted_vector, key_matrix):
+    eigenvalues, eigenvectors = np.linalg.eig(key_matrix)
+    diagonalized_key_matrix = np.dot(np.dot(eigenvectors, np.diag(eigenvalues)), np.linalg.inv(eigenvectors))
+    decrypted_vector = np.dot(np.linalg.inv(diagonalized_key_matrix), encrypted_vector)
+    decrypted_message = "".join([chr(int(np.round(np.real(char)))) for char in decrypted_vector])
+
+    return decrypted_message
 
 
 def main():
+    message = "Hello, world!"
+    key_matrix = np.random.randint(0, 256, (len(message), len(message)))
+    print("Original message:", message)
+    encrypted_message = encrypt_message(message, key_matrix)
+    print("Encrypted message:", encrypted_message)
+    decrypted_message = decrypt_message(encrypted_message, key_matrix)
+    print("Decrypted message:", decrypted_message)
+
+
+    ### TASK 1 ###
     matrix = np.array([[7, 2, 3], [2, 5, 1], [3, 1, 11]])
 
     eigenvalues, eigenvectors = np.linalg.eig(matrix)
@@ -101,6 +130,9 @@ def main():
         # Display the figure with all subplots
     plt.tight_layout()
     plt.show()
+    return
+
+
 
 if __name__ == "__main__":
     main()
